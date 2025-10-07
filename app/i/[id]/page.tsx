@@ -12,12 +12,20 @@ export default async function Page({ params }: { params: { id: string } }) {
       <section>
         <h2 style={{ fontWeight: 600, marginBottom: 8 }}>Messages</h2>
         <div style={{ display: 'grid', gap: 8 }}>
-          {messages.map((m:any) => (
-            <div key={m.msg_index} style={{ background: 'white', border: '1px solid #e5e5e5', borderRadius: 12, padding: 12 }}>
-              <div style={{ fontSize: 12, color: '#666' }}>{m.role} • idx {m.msg_index} • {toLocal(m.created_at)}</div>
-              <div style={{ whiteSpace: 'pre-wrap', fontSize: 14 }}>{m.content || ''}</div>
-            </div>
-          ))}
+          {messages.map((m:any) => {
+            const isUser = m.role === 'user';
+            const isAssistant = m.role === 'assistant';
+            const bgColor = isUser ? '#e3f2fd' : isAssistant ? '#f1f8e9' : 'white';
+            const borderColor = isUser ? '#2196f3' : isAssistant ? '#8bc34a' : '#e5e5e5';
+            const roleColor = isUser ? '#1976d2' : isAssistant ? '#558b2f' : '#666';
+            
+            return (
+              <div key={m.msg_index} style={{ background: bgColor, border: `2px solid ${borderColor}`, borderRadius: 12, padding: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: roleColor }}>{m.role} • idx {m.msg_index} • {toLocal(m.created_at)}</div>
+                <div style={{ whiteSpace: 'pre-wrap', fontSize: 14, marginTop: 6 }}>{m.content || ''}</div>
+              </div>
+            );
+          })}
         </div>
       </section>
       <aside>
